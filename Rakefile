@@ -1,21 +1,27 @@
 require 'aws-sdk-s3'
 require 'colorize'
-
-$s3 = Aws::S3::Client.new(
-    region: 'eu-west-1'
-)
-
+#
+# DEF LIST
+#
+###########################################################################
 # list buckets
 def list_buckets
-    bucket_hash = $s3.list_buckets({
-    })
-    
-    bucket_hash.each do 
-        puts bucket_hash.buckets(:name)
-    end
+  s3 = Aws::S3::Client.new(
+    region: 'us-east-1'
+  )
+  resp = s3.list_buckets({})
+  # get the total number of buckets
+  num_buckets = resp.buckets.length
+  # loop through and puts name
+  num_buckets.times do |i|
+    puts resp.buckets[i].name.colorize(:light_magenta).colorize(:background => :black)
+  end
 end
-
-desc "List all buckets"
+#
+# TASK LIST
+#
+###########################################################################
+desc 'List all buckets'
 task :list_buckets do
-    list_buckets
+  list_buckets
 end
